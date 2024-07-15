@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Movie</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        form input[type="text"],
+        form input[type="date"],
+        form textarea {
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        form input[type="submit"] {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #218838;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            color: #007bff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h2>Add New Movie</h2>
+    <form action="/movies/new" method="post" th:object="${movieRequest}">
+        <label>Title: <input type="text" th:field="*{title}" /></label><br/>
+        <label>Genre: <input type="text" th:field="*{genre}" /></label><br/>
+        <label>Release Date: <input type="date" th:field="*{releaseDate}" /></label><br/>
+        <label>Description: <textarea th:field="*{description}"></textarea></label><br/>
+        <label>Language: <input type="text" th:field="*{language}" /></label><br/>
+        <label>Director ID: <input type="text" th:field="*{directorId}" /></label><br/> <!-- New input for directorId -->
+        
+        <!-- Casts Section -->
+        <div th:each="cast, castStatus : *{casts}">
+            <h3>Cast <span th:text="${castStatus.index + 1}"></span></h3>
+            <label>Actor ID: <input type="text" th:field="*{casts[__${castStatus.index}__].actorId}" /></label><br/>
+            <label>Role: <input type="text" th:field="*{casts[__${castStatus.index}__].role}" /></label><br/>
+        </div>
+        
+        <button type="button" onclick="addCast()">Add Another Cast</button>
+        <input type="submit" value="Save"/>
+    </form>
+    <a href="/movies/all">Cancel</a>
+
+    <!-- Script to add dynamic cast fields -->
+    <script th:inline="javascript">
+        function addCast() {
+            var castsDiv = document.createElement("div");
+            var index = document.querySelectorAll('div[th\\:each="cast, castStatus : *{casts}"]').length;
+            var newHtml = '<h3>Cast ' + (index + 1) + '</h3>' +
+                          '<label>Actor ID: <input type="text" th:field="*{casts[__${index}__].actorId}" /></label><br/>' +
+                          '<label>Role: <input type="text" th:field="*{casts[__${index}__].role}" /></label><br/>';
+            castsDiv.innerHTML = newHtml;
+            document.querySelector("form").insertBefore(castsDiv, document.querySelector("button[type=button]"));
+        }
+    </script>
+</body>
+</html>

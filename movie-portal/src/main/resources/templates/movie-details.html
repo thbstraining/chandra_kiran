@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${movie.title}">Movie Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .movie-details {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .movie-details p {
+            margin-bottom: 10px;
+        }
+
+        .movie-details strong {
+            color: #333;
+        }
+
+        .movie-cast {
+            margin-top: 20px;
+        }
+
+        .movie-cast ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .movie-cast li {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .movie-cast li p {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h2 th:text="${movie.title}">Movie Details</h2>
+    
+    <div class="movie-details">
+        <p><strong>Genre:</strong> <span th:text="${movie.genre}"></span></p>
+        <p><strong>Release Date:</strong> <span th:text="${#dates.format(movie.releaseDate, 'dd-MM-yyyy')}"></span></p>
+        <p><strong>Description:</strong> <span th:text="${movie.description}"></span></p>
+        <p><strong>Language:</strong> <span th:text="${movie.language}"></span></p>
+        <p><strong>Director:</strong> <span th:text="${movie.director}"></span></p>
+		
+        
+        <div class="movie-cast">
+            <h3>Cast:</h3>
+            <ul>
+                <li th:each="actor : ${movie.actors}">
+                    <p><strong>Actor Name:</strong> <span th:text="${actor.actorName}"></span></p>
+                    <p><strong>Age:</strong> <span th:text="${actor.age}"></span></p>
+                    <p><strong>Date of Birth:</strong> <span th:text="${#dates.format(actor.dob, 'dd-MM-yyyy')}"></span></p>
+                    <p><strong>Total Movies:</strong> <span th:text="${actor.totalMovies}"></span></p>
+                    <p><strong>Industry:</strong> <span th:text="${actor.industry}"></span></p>
+                    <p><strong>Role:</strong> <span th:text="${actor.role}"></span></p>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="/movies/all">Back to Movies List</a>
+    </div>
+</body>
+</html>
